@@ -3,12 +3,18 @@ import Header from './Components/Header';
 import {Todos} from './Components/Todos';
 import {Footer} from './Components/Footer';
 import {AddTodo} from './Components/AddTodo';
+import {About} from './Components/About';
 import React, { useState } from 'react';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 function App() {
 
   const onDelete = (todo)=>{
-    // console.log('delete me', todo);
     setTodos(todos.filter((e)=>{
       return e!==todo;
     }))
@@ -16,7 +22,7 @@ function App() {
 
   const addTodo = (title, descr)=>{
     let sr;
-    if(todos.length==1){
+    if(todos.length===1){
       sr = 0;
     }else{
       sr = todos.length+1;
@@ -26,7 +32,6 @@ function App() {
       title:title,
       descr:descr
     }
-    console.log(myTodo);
     setTodos([...todos, myTodo]);
   }
 
@@ -49,12 +54,28 @@ function App() {
   ]);
 
   return (
-    <div>
-      <Header title='My Todo App'/>
-      <AddTodo addTodo={addTodo}/>
-      <Todos todos={todos} onDelete={onDelete}/>
-      <Footer/>
-    </div>
+    <>
+      <Router>
+        <Header title='My Todo App'/>
+
+        <Switch>
+          <Route exact path="/" render={()=>{
+            return(
+            <>
+              <AddTodo addTodo={addTodo}/>
+              <Todos todos={todos} onDelete={onDelete}/>
+            </>
+            )
+          }}>
+          </Route>
+          <Route exact path="/about">
+            <About />
+          </Route>
+        </Switch>
+
+        <Footer/>
+      </Router>
+    </>
   );
 }
 
